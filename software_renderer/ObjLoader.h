@@ -10,9 +10,9 @@ struct Vector3
 	double x, y, z;
 };
 
-struct Vector3i
+struct Face
 {
-	int x, y, z;
+	int v1, v2, v3;
 };
 
 class ObjLoader
@@ -21,17 +21,11 @@ public:
 	ObjLoader(const char *filename);
 	~ObjLoader();
 	Vector3 vertex(int index);
-	Vector3i face(int index);
-	Vector3 texture(int index);
-	Vector3 normal(int index);
+	Face face(int index);
 	int nVertices();
 	int nFaces();
-	int nTextures();
-	int nNormals();
 private:
 	std::vector<Vector3> vertices;
-	std::vector<Vector3i> faces;
-	std::vector<Vector3> textures;
-	std::vector<Vector3> normals;
+	std::vector<Face> faces;
 };
 

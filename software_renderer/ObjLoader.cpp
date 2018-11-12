@@ -16,6 +16,7 @@ ObjLoader::ObjLoader(const char *filename)
 
 	while (std::getline(file, line))
 	{
+		char trash;
 		// get "v" vertex values
 		if (line.substr(0, 2) == "v ")
 		{
@@ -24,36 +25,27 @@ ObjLoader::ObjLoader(const char *filename)
 			v >> vertex.x;
 			v >> vertex.y;
 			v >> vertex.z;
+			std::cout << std::to_string(vertex.x) << std::endl;
 			this->vertices.push_back(vertex);
-		}
-
-		if (line.substr(0, 3) == "vt ")
-		{
-			std::istringstream v(line.substr(2));
-			Vector3 vertex;
-			v >> vertex.x;
-			v >> vertex.y;
-			v >> vertex.z;
-			this->textures.push_back(vertex);
-		}
-
-		if (line.substr(0, 3) == "vn ")
-		{
-			std::istringstream v(line.substr(2));
-			Vector3 vertex;
-			v >> vertex.x;
-			v >> vertex.y;
-			v >> vertex.z;
-			this->normals.push_back(vertex);
 		}
 
 		if (line.substr(0, 2) == "f ")
 		{
-			std::istringstream v(line.substr(2));
-			Vector3i vertex;
-			v >> vertex.x;
-			v >> vertex.y;
-			v >> vertex.z;
+			std::istringstream iss(line.substr(2));
+			Face vertex;
+
+			int vidx, itrash;
+			std::vector<int> f;
+
+			// line format
+			// idx/vt/vn
+			while (iss >> vidx >> trash >> itrash >> trash >> itrash) {
+				vidx--; // in wavefront obj all indices start at 1, not zero
+				f.push_back(vidx);
+			}
+			vertex.v1 = f[0];
+			vertex.v2 = f[1];
+			vertex.v3 = f[2];
 			this->faces.push_back(vertex);
 		}
 	}
@@ -69,34 +61,14 @@ Vector3 ObjLoader::vertex(int index)
 	return this->vertices[index];
 }
 
-Vector3 ObjLoader::texture(int index)
-{
-	return this->textures[index];
-}
-
-Vector3i ObjLoader::face(int index)
+Face ObjLoader::face(int index)
 {
 	return this->faces[index];
-}
-
-Vector3 ObjLoader::normal(int index)
-{
-	return this->normals[index];
 }
 
 int ObjLoader::nVertices()
 {
 	return (int)this->vertices.size();
-}
-
-int ObjLoader::nTextures()
-{
-	return (int)this->textures.size();
-}
-
-int ObjLoader::nNormals()
-{
-	return (int)this->normals.size();
 }
 
 int ObjLoader::nFaces()
