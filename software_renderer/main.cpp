@@ -1,9 +1,9 @@
-#include <SDL.h>
+#include <sdl/SDL.h>
 #include <iostream>
 #include <string>
 
 #include "Primitive.h"
-#include "ObjLoader.h"
+#include "Mesh.h"
 
 #define SDL_MAIN_HANDLED
 
@@ -11,7 +11,7 @@ const int SCREEN_WIDTH = 800;
 const int SCREEN_HEIGHT = 600;
 bool quit = false;
 
-ObjLoader* model = new ObjLoader("assets/head.obj");
+Mesh *model = new Mesh("assets/head.obj");
 
 int main(int argc, char *argv[])
 {
@@ -38,37 +38,7 @@ int main(int argc, char *argv[])
 		// Clear the previous render buffer
 		SDL_RenderClear(renderer);
 
-		// set the colours for the lines
-		SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
-		// Primitive::line(renderer, 40, 40, 250, 250);
-		// Primitive::line(renderer, 250, 250, 250, 40);
-		// Primitive::line(renderer, 250, 40, 40, 40);
-
-		int sizeFaces = model->nFaces();
-		for (int i = 0; i < model->nFaces(); i++)
-		{
-			if ((i + 1) >= sizeFaces)
-			{
-				break;
-			}
-
-			Face face = model->face(i);
-
-			Vector3 v1 = model->vertex(face.v1);
-			Vector3 v2 = model->vertex(face.v2);
-			Vector3 v3 = model->vertex(face.v3);
-
-			int x0 = (v1.x + 1.)*SCREEN_WIDTH / 2.;
-			int y0 = (v1.y + 1.)*SCREEN_HEIGHT / 2.;
-			int x1 = (v2.x + 1.)*SCREEN_WIDTH / 2.;
-			int y1 = (v2.y + 1.)*SCREEN_HEIGHT / 2.;
-			int x2 = (v3.x + 1.)*SCREEN_WIDTH / 2.;
-			int y2 = (v3.y + 1.)*SCREEN_HEIGHT / 2.;
-			Primitive::line(renderer, x0, y0, x1, y1);
-			Primitive::line(renderer, x1, y1, x2, y2);
-			Primitive::line(renderer, x2, y2, x0, y0);
-			// Note: this works but its shitty, need to fix it
-		}
+		model->draw(renderer, SCREEN_WIDTH, SCREEN_HEIGHT);
 
 		// Set the colour for the background
 		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);

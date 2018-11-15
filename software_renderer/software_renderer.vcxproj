@@ -123,11 +123,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="ObjLoader.cpp" />
+    <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="Primitive.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ObjLoader.h" />
+    <ClInclude Include="Mesh.h" />
     <ClInclude Include="Primitive.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
